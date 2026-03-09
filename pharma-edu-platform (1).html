@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OncoPharm Academy — Breast Cancer Training Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0d9488;
+    --teal-light: #14b8a6;
+    --teal-dark: #0f766e;
+    --rose: #e11d48;
+    --rose-light: #fb7185;
+    --cream: #fdf8f4;
+    --charcoal: #1a1a2e;
+    --slate: #334155;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --white: #ffffff;
+    --gold: #f59e0b;
+    --purple: #7c3aed;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+    background: var(--charcoal);
+    padding: 0;
+    z-index: 100;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(135deg, #0f766e 0%, #1a1a2e 100%);
+  }
+
+  .logo-mark {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+  }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: var(--teal-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .logo-sub { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+
+  .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 0; }
+
+  .nav-section-label {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 12px 24px 6px;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 24px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+  .nav-item.active { background: rgba(20,184,166,0.12); color: var(--teal-light); border-left-color: var(--teal-light); }
+  .nav-item .icon { font-size: 15px; width: 20px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .user-badge {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .user-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 13px; font-weight: 700;
+  }
+
+  .user-info { flex: 1; }
+  .user-name { font-size: 12px; color: white; font-weight: 600; }
+  .user-role { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(253,248,244,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--charcoal); }
+  .page-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    border: none; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .btn-teal { background: var(--teal); color: white; }
+  .btn-teal:hover { background: var(--teal-dark); }
+  .btn-ghost { background: transparent; color: var(--slate); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--border); }
+
+  /* ── CONTENT ── */
+  .content { padding: 32px 36px; }
+
+  /* ── HERO STATS ── */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: white; border-radius: 14px; padding: 20px 22px;
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+  .stat-card::before {
+    content: ''; position: absolute; right: -15px; top: -15px;
+    width: 70px; height: 70px; border-radius: 50%;
+    opacity: 0.08;
+  }
+
+  .stat-card.teal::before { background: var(--teal); }
+  .stat-card.rose::before { background: var(--rose); }
+  .stat-card.gold::before { background: var(--gold); }
+  .stat-card.purple::before { background: var(--purple); }
+
+  .stat-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .stat-value { font-size: 30px; font-weight: 700; color: var(--charcoal); margin: 4px 0 2px; font-family: 'Playfair Display', serif; }
+  .stat-delta { font-size: 12px; color: var(--teal); font-weight: 500; }
+  .stat-icon { position: absolute; right: 18px; top: 18px; font-size: 22px; opacity: 0.7; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700; color: var(--charcoal);
+  }
+
+  .section-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── TWO-COL GRID ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 28px; }
+
+  /* ── CARD ── */
+  .card {
+    background: white; border-radius: 14px;
+    border: 1px solid var(--border); overflow: hidden;
+  }
+
+  .card-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .card-body { padding: 18px 22px; }
+
+  /* ── SCHEDULE TABLE ── */
+  .schedule-table { width: 100%; border-collapse: collapse; }
+
+  .schedule-table th {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+    padding: 10px 14px; text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: #f8fafc;
+  }
+
+  .schedule-table td {
+    padding: 11px 14px; font-size: 13px; color: var(--slate);
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+
+  .schedule-table tr:last-child td { border-bottom: none; }
+  .schedule-table tr:hover td { background: #f8fafc; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+  }
+
+  .badge-teal { background: #ccfbf1; color: var(--teal-dark); }
+  .badge-rose { background: #ffe4e6; color: #be123c; }
+  .badge-gold { background: #fef3c7; color: #92400e; }
+  .badge-purple { background: #ede9fe; color: #6d28d9; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-gray { background: #f1f5f9; color: var(--muted); }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot-teal { background: var(--teal); }
+  .dot-rose { background: var(--rose); }
+  .dot-gold { background: var(--gold); }
+  .dot-live { background: #22c55e; animation: pulse 1.5s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── COURSE CARDS ── */
+  .course-card {
+    background: white; border-radius: 14px;
+    border: 1px solid var(--border); overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+  }
+
+  .course-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+
+  .course-thumb {
+    height: 130px; display: flex; align-items: center; justify-content: center;
+    font-size: 40px; position: relative;
+  }
+
+  .course-thumb.c1 { background: linear-gradient(135deg, #0d9488 0%, #0891b2 100%); }
+  .course-thumb.c2 { background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%); }
+  .course-thumb.c3 { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+  .course-thumb.c4 { background: linear-gradient(135deg, #059669 0%, #0d9488 100%); }
+  .course-thumb.c5 { background: linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%); }
+  .course-thumb.c6 { background: linear-gradient(135deg, #be185d 0%, #e11d48 100%); }
+
+  .course-level {
+    position: absolute; top: 10px; right: 10px;
+  }
+
+  .course-body { padding: 16px 18px; }
+  .course-title { font-size: 14px; font-weight: 700; color: var(--charcoal); margin-bottom: 5px; line-height: 1.35; }
+  .course-meta { font-size: 11.5px; color: var(--muted); margin-bottom: 10px; }
+
+  .progress-bar {
+    width: 100%; height: 5px; background: #e2e8f0;
+    border-radius: 10px; overflow: hidden; margin-bottom: 8px;
+  }
+
+  .progress-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    transition: width 0.5s ease;
+  }
+
+  .progress-label { font-size: 11px; color: var(--muted); }
+
+  /* ── VIDEO LIST ── */
+  .video-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+  }
+
+  .video-item:last-child { border-bottom: none; }
+  .video-item:hover .video-thumb { opacity: 0.8; }
+
+  .video-thumb {
+    width: 72px; height: 48px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    position: relative; transition: opacity 0.2s;
+  }
+
+  .video-thumb::after {
+    content: '▶';
+    position: absolute;
+    font-size: 14px; color: white;
+    background: rgba(0,0,0,0.5); border-radius: 50%;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    padding-left: 2px;
+  }
+
+  .vt1 { background: linear-gradient(135deg, #0d9488, #0891b2); }
+  .vt2 { background: linear-gradient(135deg, #7c3aed, #db2777); }
+  .vt3 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .vt4 { background: linear-gradient(135deg, #059669, #0d9488); }
+  .vt5 { background: linear-gradient(135deg, #1d4ed8, #7c3aed); }
+
+  .video-info { flex: 1; }
+  .video-title { font-size: 13px; font-weight: 600; color: var(--charcoal); margin-bottom: 3px; }
+  .video-meta { font-size: 11px; color: var(--muted); }
+  .video-duration {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    background: #f1f5f9; padding: 3px 7px; border-radius: 5px;
+  }
+
+  /* ── QUIZ / ASSESSMENT ── */
+  .quiz-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 16px; border-radius: 10px;
+    background: #f8fafc; border: 1px solid var(--border);
+    margin-bottom: 10px; cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .quiz-item:hover { background: #f0fdfa; border-color: var(--teal-light); }
+  .quiz-icon { font-size: 20px; width: 36px; text-align: center; }
+  .quiz-info { flex: 1; }
+  .quiz-title { font-size: 13px; font-weight: 600; color: var(--charcoal); }
+  .quiz-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── ANNOUNCEMENT ── */
+  .announcement {
+    background: linear-gradient(135deg, #0f766e 0%, #1e1b4b 100%);
+    border-radius: 14px; padding: 22px 26px;
+    display: flex; align-items: center; gap: 20px;
+    margin-bottom: 28px; color: white;
+    position: relative; overflow: hidden;
+  }
+
+  .announcement::after {
+    content: ''; position: absolute; right: -30px; top: -30px;
+    width: 150px; height: 150px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .announce-icon { font-size: 36px; flex-shrink: 0; }
+  .announce-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .announce-body { font-size: 13px; opacity: 0.8; }
+  .announce-action { margin-left: auto; flex-shrink: 0; }
+
+  .btn-white { background: white; color: var(--teal-dark); }
+  .btn-white:hover { background: #f0fdfa; }
+
+  /* ── CALENDAR STRIP ── */
+  .calendar-strip {
+    display: flex; gap: 10px; overflow-x: auto;
+    padding-bottom: 4px; margin-bottom: 18px;
+  }
+
+  .cal-day {
+    flex-shrink: 0; width: 54px; text-align: center;
+    padding: 10px 6px; border-radius: 12px;
+    border: 1px solid var(--border); background: white;
+    cursor: pointer; transition: all 0.2s;
+  }
+
+  .cal-day:hover { border-color: var(--teal); }
+  .cal-day.active { background: var(--teal); border-color: var(--teal); color: white; }
+  .cal-day.active .cal-num { color: white; }
+  .cal-day.active .cal-wd { color: rgba(255,255,255,0.7); }
+  .cal-day.has-event { border-color: var(--rose-light); }
+
+  .cal-wd { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 0.5px; }
+  .cal-num { font-size: 18px; font-weight: 700; color: var(--charcoal); margin: 2px 0; }
+  .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--rose); margin: 0 auto; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+
+  .tl-item {
+    position: relative; padding: 0 0 18px 20px;
+  }
+
+  .tl-item::before {
+    content: ''; position: absolute; left: -24px; top: 3px;
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid white; background: var(--teal);
+    z-index: 1;
+  }
+
+  .tl-item.upcoming::before { background: var(--gold); }
+  .tl-item.live::before { background: #22c55e; box-shadow: 0 0 0 4px rgba(34,197,94,0.2); }
+
+  .tl-time { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .tl-title { font-size: 13.5px; font-weight: 600; color: var(--charcoal); margin: 2px 0; }
+  .tl-sub { font-size: 12px; color: var(--muted); }
+
+  /* ── RESOURCE LIST ── */
+  .resource-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: white;
+    margin-bottom: 8px; cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .resource-item:hover { border-color: var(--teal); background: #f0fdfa; }
+  .resource-icon { font-size: 22px; width: 40px; text-align: center; }
+  .resource-info { flex: 1; }
+  .resource-name { font-size: 13px; font-weight: 600; color: var(--charcoal); }
+  .resource-meta { font-size: 11px; color: var(--muted); }
+  .resource-size { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 4px; padding: 4px; background: #f1f5f9; border-radius: 10px; margin-bottom: 20px; }
+  .tab {
+    padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; color: var(--muted); border: none;
+    background: transparent; font-family: 'DM Sans', sans-serif;
+  }
+  .tab.active { background: white; color: var(--charcoal); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* ── LEADERBOARD ── */
+  .leaderboard-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 10px;
+    margin-bottom: 8px; background: #f8fafc;
+  }
+
+  .rank { font-size: 14px; font-weight: 800; width: 24px; text-align: center; color: var(--muted); }
+  .rank.gold { color: #f59e0b; }
+  .rank.silver { color: #94a3b8; }
+  .rank.bronze { color: #cd7c2f; }
+
+  .lb-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+
+  .lb-info { flex: 1; }
+  .lb-name { font-size: 13px; font-weight: 600; color: var(--charcoal); }
+  .lb-role { font-size: 11px; color: var(--muted); }
+  .lb-score { font-size: 14px; font-weight: 700; color: var(--teal); font-family: 'Playfair Display', serif; }
+
+  /* ── FOOTER LINE ── */
+  .full-row { grid-column: 1 / -1; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1200px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .three-col { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-mark">
+      <div class="logo-icon">🎗️</div>
+      <div>
+        <div class="logo-text">OncoPharm<br>Academy</div>
+      </div>
+    </div>
+    <div class="logo-sub">Breast Cancer Training Center</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item active" href="#"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="#"><span class="icon">📅</span> Schedule & Calendar</a>
+    <a class="nav-item" href="#"><span class="icon">🎓</span> My Courses</a>
+    <a class="nav-item" href="#"><span class="icon">🎬</span> Video Library</a>
+    <a class="nav-item" href="#"><span class="icon">📝</span> Assessments & Quizzes</a>
+    <a class="nav-item" href="#"><span class="icon">📄</span> Resources & Guidelines</a>
+
+    <div class="nav-section-label">Learning Tracks</div>
+    <a class="nav-item" href="#"><span class="icon">💊</span> Pharmacotherapy</a>
+    <a class="nav-item" href="#"><span class="icon">🧬</span> Targeted Therapy</a>
+    <a class="nav-item" href="#"><span class="icon">⚗️</span> Chemotherapy Protocols</a>
+    <a class="nav-item" href="#"><span class="icon">🩺</span> Supportive Care</a>
+    <a class="nav-item" href="#"><span class="icon">🧪</span> Clinical Trials</a>
+
+    <div class="nav-section-label">Intern Pharmacy (Imtiaz)</div>
+    <a class="nav-item" href="#"><span class="icon">🔰</span> Orientation Program</a>
+    <a class="nav-item" href="#"><span class="icon">📋</span> Rotation Checklist</a>
+    <a class="nav-item" href="#"><span class="icon">🏆</span> Competency Portfolio</a>
+    <a class="nav-item" href="#"><span class="icon">👨‍⚕️</span> Supervisor Feedback</a>
+
+    <div class="nav-section-label">Community</div>
+    <a class="nav-item" href="#"><span class="icon">💬</span> Discussion Forum</a>
+    <a class="nav-item" href="#"><span class="icon">🔔</span> Announcements</a>
+    <a class="nav-item" href="#"><span class="icon">📊</span> My Progress</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-badge">
+      <div class="user-avatar">DR</div>
+      <div class="user-info">
+        <div class="user-name">Dr. Rania Mahmoud</div>
+        <div class="user-role">Clinical Pharmacist • Oncology</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div>
+      <div class="page-title">Learning Dashboard</div>
+      <div class="page-sub">Department of Training & Continuing Education — Breast Cancer Center</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost">🔔 3 New</button>
+      <button class="btn btn-teal">+ Enroll in Course</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ANNOUNCEMENT BANNER -->
+    <div class="announcement">
+      <div class="announce-icon">📡</div>
+      <div>
+        <div class="announce-title">🔴 LIVE NOW — Grand Round Lecture: HER2+ Breast Cancer — New ADC Agents 2025</div>
+        <div class="announce-body">Prof. Ahmed El-Sayed is presenting. 47 participants joined. Recording will be available in 2 hours.</div>
+      </div>
+      <div class="announce-action">
+        <button class="btn btn-white">Join Live →</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card teal">
+        <div class="stat-icon">📚</div>
+        <div class="stat-label">Enrolled Courses</div>
+        <div class="stat-value">12</div>
+        <div class="stat-delta">↑ 3 new this month</div>
+      </div>
+      <div class="stat-card rose">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-label">Hours Completed</div>
+        <div class="stat-value">84h</div>
+        <div class="stat-delta">CME Credits: 42 pts</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-label">Certificates Earned</div>
+        <div class="stat-value">6</div>
+        <div class="stat-delta">Next: Targeted Therapy</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon">📊</div>
+        <div class="stat-label">Assessment Score</div>
+        <div class="stat-value">91%</div>
+        <div class="stat-delta">Department Rank: #3</div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE + LIVE TIMELINE -->
+    <div class="two-col">
+      <!-- WEEKLY SCHEDULE -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="section-title">📅 Weekly Lecture Schedule</div>
+            <div class="section-sub">March 2025 — Week 10</div>
+          </div>
+          <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;">Full Calendar</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th>Day / Time</th>
+                <th>Topic</th>
+                <th>Speaker</th>
+                <th>Type</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Mon 10:00</strong><br><span style="font-size:11px;color:var(--muted)">Mar 10</span></td>
+                <td>HER2+ Breast Cancer — ADC Agents (T-DM1 vs T-DXd)</td>
+                <td>Prof. El-Sayed</td>
+                <td><span class="badge badge-teal">Grand Round</span></td>
+                <td><span class="badge badge-rose"><span class="dot dot-live"></span> LIVE</span></td>
+              </tr>
+              <tr>
+                <td><strong>Tue 12:00</strong><br><span style="font-size:11px;color:var(--muted)">Mar 11</span></td>
+                <td>CDK4/6 Inhibitors in HR+ mBC: Palbociclib vs Ribociclib</td>
+                <td>Dr. Amal Hassan</td>
+                <td><span class="badge badge-purple">Workshop</span></td>
+                <td><span class="badge badge-gold">Tomorrow</span></td>
+              </tr>
+              <tr>
+                <td><strong>Wed 09:00</strong><br><span style="font-size:11px;color:var(--muted)">Mar 12</span></td>
+                <td>BRCA-Mutated BC: PARP Inhibitors & Olaparib Use</td>
+                <td>Dr. Mona Tarek</td>
+                <td><span class="badge badge-blue">Lecture</span></td>
+                <td><span class="badge badge-gray">Scheduled</span></td>
+              </tr>
+              <tr>
+                <td><strong>Thu 11:00</strong><br><span style="font-size:11px;color:var(--muted)">Mar 13</span></td>
+                <td>Chemotherapy-Induced Nausea: Antiemetic Protocols</td>
+                <td>Dr. Sara Ahmed</td>
+                <td><span class="badge badge-teal">Practical</span></td>
+                <td><span class="badge badge-gray">Scheduled</span></td>
+              </tr>
+              <tr>
+                <td><strong>Thu 14:00</strong><br><span style="font-size:11px;color:var(--muted)">Mar 13</span></td>
+                <td>Intern Journal Club — Case Presentation</td>
+                <td>Interns (Supervised)</td>
+                <td><span class="badge badge-purple">Journal Club</span></td>
+                <td><span class="badge badge-gray">Scheduled</span></td>
+              </tr>
+              <tr>
+                <td><strong>Fri 10:00</strong><br><span style="font-size:11px;color:var(--muted)">Mar 14</span></td>
+                <td>Oncology Drug Safety: Extravasation Management</td>
+                <td>Dr. Khaled Nour</td>
+                <td><span class="badge badge-rose">Emergency</span></td>
+                <td><span class="badge badge-gray">Scheduled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TODAY'S TIMELINE -->
+      <div>
+        <!-- Calendar Strip -->
+        <div class="card" style="margin-bottom:18px;">
+          <div class="card-body" style="padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">March 2025</div>
+            <div class="calendar-strip">
+              <div class="cal-day"><div class="cal-wd">MON</div><div class="cal-num">10</div><div class="cal-dot"></div></div>
+              <div class="cal-day active"><div class="cal-wd">TUE</div><div class="cal-num">11</div><div class="cal-dot" style="opacity:0"></div></div>
+              <div class="cal-day has-event"><div class="cal-wd">WED</div><div class="cal-num">12</div><div class="cal-dot"></div></div>
+              <div class="cal-day has-event"><div class="cal-wd">THU</div><div class="cal-num">13</div><div class="cal-dot"></div></div>
+              <div class="cal-day"><div class="cal-wd">FRI</div><div class="cal-num">14</div><div class="cal-dot" style="opacity:0"></div></div>
+              <div class="cal-day"><div class="cal-wd">SAT</div><div class="cal-num">15</div><div class="cal-dot" style="opacity:0"></div></div>
+              <div class="cal-day"><div class="cal-wd">SUN</div><div class="cal-num">16</div><div class="cal-dot" style="opacity:0"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today Timeline -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="section-title">Today's Activity</div>
+              <div class="section-sub">Monday, March 10, 2025</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="tl-item live">
+                <div class="tl-time">10:00 AM — NOW</div>
+                <div class="tl-title">🔴 Grand Round: HER2+ BC — ADC Agents</div>
+                <div class="tl-sub">Online • Prof. El-Sayed • 47 attending</div>
+              </div>
+              <div class="tl-item upcoming">
+                <div class="tl-time">12:30 PM</div>
+                <div class="tl-title">Lunch Break / Self-Study</div>
+                <div class="tl-sub">Recommended: CDK4/6 inhibitors video</div>
+              </div>
+              <div class="tl-item upcoming">
+                <div class="tl-time">2:00 PM</div>
+                <div class="tl-title">📝 Quiz: Endocrine Therapy Module 3</div>
+                <div class="tl-sub">30 Questions • 45 min • Due Today</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-time">4:00 PM</div>
+                <div class="tl-title">✅ Video Lecture Completed</div>
+                <div class="tl-sub">Cardiotoxicity Monitoring — 38 min</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-time">9:00 AM</div>
+                <div class="tl-title">✅ Morning Case Discussion</div>
+                <div class="tl-sub">Triple-Negative BC case review</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSES -->
+    <div class="section-header">
+      <div>
+        <div class="section-title">🎓 Learning Tracks & Courses</div>
+        <div class="section-sub">Structured curriculum for pharmacists & pharmacy interns</div>
+      </div>
+      <div class="tabs">
+        <button class="tab active">All Courses</button>
+        <button class="tab">Pharmacists</button>
+        <button class="tab">Interns (Imtiaz)</button>
+        <button class="tab">Advanced</button>
+      </div>
+    </div>
+
+    <div class="three-col">
+      <div class="course-card">
+        <div class="course-thumb c1">
+          <span style="color:white;font-size:42px;">💊</span>
+          <div class="course-level" style="position:absolute;top:10px;left:10px;"><span class="badge badge-teal">Foundational</span></div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Breast Cancer Pharmacotherapy Essentials</div>
+          <div class="course-meta">👤 Dr. Amal Hassan • 12 Modules • 8.5h</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+          <div class="progress-label">75% complete — 9/12 modules done</div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-thumb c2">
+          <span style="color:white;font-size:42px;">🧬</span>
+          <div class="course-level" style="position:absolute;top:10px;left:10px;"><span class="badge badge-purple">Advanced</span></div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Targeted Therapy & Biomarker-Driven Treatment</div>
+          <div class="course-meta">👤 Prof. El-Sayed • 10 Modules • 11h</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+          <div class="progress-label">40% complete — 4/10 modules done</div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-thumb c3">
+          <span style="color:white;font-size:42px;">⚗️</span>
+          <div class="course-level" style="position:absolute;top:10px;left:10px;"><span class="badge badge-gold">Intermediate</span></div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Chemotherapy Protocols: AC, TC, CMF & Beyond</div>
+          <div class="course-meta">👤 Dr. Sara Ahmed • 8 Modules • 6h</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+          <div class="progress-label">✅ Completed — Certificate Issued</div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-thumb c4">
+          <span style="color:white;font-size:42px;">🩺</span>
+          <div class="course-level" style="position:absolute;top:10px;left:10px;"><span class="badge badge-teal">Foundational</span></div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Supportive Care: Managing Chemo Side Effects</div>
+          <div class="course-meta">👤 Dr. Khaled Nour • 7 Modules • 5h</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+          <div class="progress-label">20% complete — 1/7 modules done</div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-thumb c5">
+          <span style="color:white;font-size:42px;">🔬</span>
+          <div class="course-level" style="position:absolute;top:10px;left:10px;"><span class="badge badge-blue">Intern Track</span></div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Pharmacy Intern (Imtiaz) — Oncology Orientation</div>
+          <div class="course-meta">👤 Dr. Rania Mahmoud • 15 Modules • 12h</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+          <div class="progress-label">55% complete — 8/15 modules done</div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-thumb c6">
+          <span style="color:white;font-size:42px;">🧪</span>
+          <div class="course-level" style="position:absolute;top:10px;left:10px;"><span class="badge badge-rose">New 2025</span></div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Clinical Trials & New Drug Pipeline in BC</div>
+          <div class="course-meta">👤 Prof. El-Sayed • 6 Modules • 7h</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+          <div class="progress-label">Not started — New course available</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEOS + QUIZZES -->
+    <div class="two-col">
+      <!-- VIDEO LIBRARY -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="section-title">🎬 Recent Video Lectures</div>
+            <div class="section-sub">HD recorded lectures & case discussions</div>
+          </div>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">View All</button>
+        </div>
+        <div class="card-body">
+          <div class="video-item">
+            <div class="video-thumb vt1"></div>
+            <div class="video-info">
+              <div class="video-title">T-DM1 vs Trastuzumab Deruxtecan (T-DXd) — Head to Head</div>
+              <div class="video-meta">Dr. El-Sayed • Grand Round • Mar 10, 2025</div>
+            </div>
+            <span class="badge badge-rose">🔴 Live</span>
+          </div>
+          <div class="video-item">
+            <div class="video-thumb vt2"></div>
+            <div class="video-info">
+              <div class="video-title">Endocrine Resistance Mechanisms in HR+ Breast Cancer</div>
+              <div class="video-meta">Dr. Amal Hassan • Lecture • Mar 7, 2025</div>
+            </div>
+            <div class="video-duration">52:14</div>
+          </div>
+          <div class="video-item">
+            <div class="video-thumb vt3"></div>
+            <div class="video-info">
+              <div class="video-title">PARP Inhibitors: Clinical Case — BRCA-Positive Patient</div>
+              <div class="video-meta">Dr. Mona Tarek • Case Study • Mar 5, 2025</div>
+            </div>
+            <div class="video-duration">38:40</div>
+          </div>
+          <div class="video-item">
+            <div class="video-thumb vt4"></div>
+            <div class="video-info">
+              <div class="video-title">Immunotherapy in Triple-Negative BC: Atezolizumab Update</div>
+              <div class="video-meta">Dr. Sara Ahmed • Research Update • Mar 3, 2025</div>
+            </div>
+            <div class="video-duration">44:20</div>
+          </div>
+          <div class="video-item">
+            <div class="video-thumb vt5"></div>
+            <div class="video-info">
+              <div class="video-title">Intern Case: Dose Adjustment in Renal Impairment</div>
+              <div class="video-meta">Interns (Supervised) • Journal Club • Feb 28, 2025</div>
+            </div>
+            <div class="video-duration">29:05</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSESSMENTS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="section-title">📝 Assessments & Certifications</div>
+            <div class="section-sub">Quizzes, MCQs, case-based OSCEs & portfolios</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="quiz-item">
+            <div class="quiz-icon">⏰</div>
+            <div class="quiz-info">
+              <div class="quiz-title">Module 10 Quiz — CDK4/6 Inhibitors</div>
+              <div class="quiz-meta">25 MCQ • 30 min • Due: Today 5:00 PM</div>
+            </div>
+            <span class="badge badge-rose">Due Today</span>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-icon">📋</div>
+            <div class="quiz-info">
+              <div class="quiz-title">OSCE — Counseling Simulation: Capecitabine</div>
+              <div class="quiz-meta">Practical Assessment • 20 min • Due: Mar 13</div>
+            </div>
+            <span class="badge badge-gold">Upcoming</span>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-icon">🧠</div>
+            <div class="quiz-info">
+              <div class="quiz-title">Case-Based Exam — Metastatic HER2+ BC</div>
+              <div class="quiz-meta">5 Clinical Cases • 60 min • Due: Mar 15</div>
+            </div>
+            <span class="badge badge-gold">Upcoming</span>
+          </div>
+          <div class="quiz-item" style="background:#f0fdf4;border-color:#86efac;">
+            <div class="quiz-icon">✅</div>
+            <div class="quiz-info">
+              <div class="quiz-title">Chemotherapy Protocols — Final Exam</div>
+              <div class="quiz-meta">Score: 94% • Passed • Certificate Issued</div>
+            </div>
+            <span class="badge badge-teal">92/100</span>
+          </div>
+          <div class="quiz-item" style="background:#f0fdf4;border-color:#86efac;">
+            <div class="quiz-icon">🏆</div>
+            <div class="quiz-info">
+              <div class="quiz-title">Drug Interaction Quiz — Tamoxifen & CYP2D6</div>
+              <div class="quiz-meta">Score: 88% • Passed • Feb 22, 2025</div>
+            </div>
+            <span class="badge badge-teal">88/100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESOURCES + LEADERBOARD -->
+    <div class="two-col">
+      <!-- RESOURCES -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="section-title">📚 Guidelines & Resources</div>
+            <div class="section-sub">Latest NCCN, ESMO, ASCO & local protocols</div>
+          </div>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">Browse All</button>
+        </div>
+        <div class="card-body">
+          <div class="resource-item">
+            <div class="resource-icon">📕</div>
+            <div class="resource-info">
+              <div class="resource-name">NCCN Guidelines — Breast Cancer v3.2025</div>
+              <div class="resource-meta">NCCN Official • Updated Feb 2025 • PDF</div>
+            </div>
+            <div class="resource-size">4.2 MB</div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">📗</div>
+            <div class="resource-info">
+              <div class="resource-name">ESMO Clinical Practice Guidelines — mBC 2024</div>
+              <div class="resource-meta">ESMO Official • Updated Dec 2024 • PDF</div>
+            </div>
+            <div class="resource-size">3.8 MB</div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">🗂️</div>
+            <div class="resource-info">
+              <div class="resource-name">Hospital Drug Formulary — Oncology Unit 2025</div>
+              <div class="resource-meta">Internal Document • Updated Jan 2025 • PDF</div>
+            </div>
+            <div class="resource-size">1.1 MB</div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">📊</div>
+            <div class="resource-info">
+              <div class="resource-name">Antiemetic Dosing Chart — All Regimens</div>
+              <div class="resource-meta">Department Protocol • Quick Reference • PDF</div>
+            </div>
+            <div class="resource-size">0.5 MB</div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">🧬</div>
+            <div class="resource-info">
+              <div class="resource-name">Biomarker Testing Guide — BRCA, HER2, HR, PD-L1</div>
+              <div class="resource-meta">Pathology & Pharmacy Joint Protocol • 2024</div>
+            </div>
+            <div class="resource-size">2.3 MB</div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">📋</div>
+            <div class="resource-info">
+              <div class="resource-name">Intern Rotation Logbook — Oncology Pharmacy</div>
+              <div class="resource-meta">Imtiaz Program Template • Fillable PDF</div>
+            </div>
+            <div class="resource-size">0.8 MB</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="card-header">
+            <div>
+              <div class="section-title">🏆 Department Leaderboard</div>
+              <div class="section-sub">Based on quiz scores + course completion</div>
+            </div>
+            <span class="badge badge-gold">March 2025</span>
+          </div>
+          <div class="card-body">
+            <div class="leaderboard-item" style="background:#fef3c7;">
+              <div class="rank gold">🥇</div>
+              <div class="lb-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">SM</div>
+              <div class="lb-info">
+                <div class="lb-name">Sara Mohamed</div>
+                <div class="lb-role">Clinical Pharmacist</div>
+              </div>
+              <div class="lb-score">1,842</div>
+            </div>
+            <div class="leaderboard-item" style="background:#f1f5f9;">
+              <div class="rank silver">🥈</div>
+              <div class="lb-avatar" style="background:linear-gradient(135deg,#64748b,#1e293b);">AH</div>
+              <div class="lb-info">
+                <div class="lb-name">Ahmed Hassan</div>
+                <div class="lb-role">Pharmacy Intern</div>
+              </div>
+              <div class="lb-score">1,710</div>
+            </div>
+            <div class="leaderboard-item" style="background:#fff7ed;">
+              <div class="rank bronze">🥉</div>
+              <div class="lb-avatar" style="background:linear-gradient(135deg,#0d9488,#7c3aed);">DR</div>
+              <div class="lb-info">
+                <div class="lb-name">Dr. Rania Mahmoud</div>
+                <div class="lb-role">You — Clinical Pharmacist</div>
+              </div>
+              <div class="lb-score">1,655</div>
+            </div>
+            <div class="leaderboard-item">
+              <div class="rank" style="color:var(--muted);">4</div>
+              <div class="lb-avatar" style="background:linear-gradient(135deg,#be185d,#7c3aed);">MT</div>
+              <div class="lb-info">
+                <div class="lb-name">Mona Tarek</div>
+                <div class="lb-role">Senior Pharmacist</div>
+              </div>
+              <div class="lb-score">1,590</div>
+            </div>
+            <div class="leaderboard-item">
+              <div class="rank" style="color:var(--muted);">5</div>
+              <div class="lb-avatar" style="background:linear-gradient(135deg,#0891b2,#0d9488);">KN</div>
+              <div class="lb-info">
+                <div class="lb-name">Khaled Nour</div>
+                <div class="lb-role">Pharmacy Intern</div>
+              </div>
+              <div class="lb-score">1,432</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK IDEA PANEL -->
+        <div class="card" style="background:linear-gradient(135deg,#0f766e,#1e1b4b);color:white;border:none;">
+          <div class="card-body">
+            <div style="font-size:13px;font-weight:700;opacity:0.6;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">💡 Platform Features</div>
+            <div style="font-size:13px;line-height:1.8;opacity:0.85;">
+              ✅ Live & recorded lectures<br>
+              ✅ NCCN/ESMO guideline library<br>
+              ✅ AI-powered drug interaction checker<br>
+              ✅ Monthly Grand Rounds archive<br>
+              ✅ CME credit tracking system<br>
+              ✅ Intern logbook & competency portfolio<br>
+              ✅ WhatsApp / email notifications<br>
+              ✅ Multilingual support (EN / AR)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      this.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Nav items
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Calendar days
+  document.querySelectorAll('.cal-day').forEach(day => {
+    day.addEventListener('click', function() {
+      document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Progress bar animation on load
+  document.querySelectorAll('.progress-fill').forEach(bar => {
+    const width = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.width = width; }, 300);
+  });
+</script>
+</body>
+</html>
